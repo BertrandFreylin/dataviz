@@ -17,7 +17,7 @@
 		$query = "SELECT user1, user2, date
 				FROM relations";
 		if($user != 0) {
-			$query = $query." WHERE user1 IN (".$user.")";
+			$query = $query." WHERE user1 IN (".$user.") ORDER BY date";
 		}
 		
 		$result = mysqli_query($conn, $query);

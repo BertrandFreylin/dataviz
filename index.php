@@ -22,7 +22,7 @@
                 <div><span class="avatar"></span></div>
                 <div>email: <span class="email"></span></div>
             </div>
-			<div id="exo1" class="graph"></div>
+            <div id="exo1" class="graph"></div>
 			<div class="jqplot-graph graph">
             	<div id="exo2" style="width: 820px; height: 500px;"></div>
 			</div>

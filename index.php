@@ -1,32 +1,22 @@
-  <html>
-  <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales'],
-          ['2004',  1000],
-          ['2005',  1170],
-          ['2006',  660],
-          ['2007',  1030]
-        ]);
-
-        var options = {
-          title: 'Company Performance',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-        chart.draw(data, options);
-      }
-    </script>
-  </head>
-  <body>
-    <div id="curve_chart" style="width: 900px; height: 500px"></div>
-  </body>
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Data Vizualisation - TP1</title>
+		<!-- Inclusion CSS (librairie + perso) -->
+		<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css">
+		<link rel="stylesheet" type="text/css" href="css/dataviz.css">
+		
+		<!-- Inclusion JS (librairie + scripts de création de graph) -->
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+		
+		<script type="text/javascript" src="js/dataviz.js"></script>
+	</head>
+	<body>
+		<?php include ('structure/header.php'); ?>
+		<div id="content">
+			
+		</div>
+		<?php include ('structure/footer.php'); ?>
+	</body>
 </html>

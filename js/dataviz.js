@@ -18,6 +18,7 @@ $(document).ready(function(){
 	****************************************/
 	getRequest("webservices/liste_amis_user.php?user=4", function(data) {
 		var tab = [['Date', 'Amis', 'Total Amis']];
+		console.log(data);
 		var total =0;
 		for (var i = 0; i<data.length; i++) {
 			var date = data[i][2];
@@ -25,6 +26,7 @@ $(document).ready(function(){
 			for(var j = i; j<data.length; j++) {
 				if(date == data[j][2]){
 					value+=1;
+					i = j;
 				}
 			}
 			total += value;

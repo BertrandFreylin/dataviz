@@ -17,7 +17,8 @@ $(document).ready(function(){
 		QUESTION 1 : PIE CHART : Visite par marque
 	****************************************/
 	getRequest("webservices/liste_amis_user.php?user=4", function(data) {
-		var tab = [['Date', 'Amis']];
+		var tab = [['Date', 'Amis', 'Total Amis']];
+		var total =0;
 		for (var i = 0; i<data.length; i++) {
 			var date = data[i][2];
 			value = 0;
@@ -26,7 +27,9 @@ $(document).ready(function(){
 					value+=1;
 				}
 			}
-			tab.push([date, value]);
+			total += value;
+			tab.push([date, value, total]);
+			
 		}
 
 		google.charts.load('current', {'packages':['corechart']});

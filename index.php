@@ -8,8 +8,12 @@
 
 		<!-- Inclusion JS (librairie + scripts de création de graph) -->
 		<script type="text/javascript" src="js/jquery.js"></script>
+        <!--jqplot-->
 		<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
         <script type="text/javascript" src="js/renderer/jqplot.dateAxisRenderer.js"></script>
+        <script type="text/javascript" src="js/renderer/jqplot.barRenderer.js"></script>
+        <script type="text/javascript" src="js/renderer/jqplot.CategoryAxisRenderer.js"></script>
+        <!--Google charts-->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 		<script type="text/javascript" src="js/dataviz.js"></script>
@@ -23,13 +27,20 @@
 		</div>
 		<div id="content">
 			<div id="exo1" class="graph"><p class="no-data">NO DATA</p></div>
-			<div class="jqplot-graph graph">
 
+            <div class="jqplot-graph graph">
             	<div id="exo2" style="width: 820px; height: 500px;">
-					<p class="no-data">NO DATA</p>
-				</div>
+    				<p class="no-data">NO DATA</p>
+    			</div>
 			</div>
+
             <div id="exo3" class="graph"><p class="no-data">NO DATA</p></div>
+
+            <div class="jqplot-graph graph">
+                <div id="exo4" style="width: 820px; height: 500px;">
+                    <p class="no-data">NO DATA</p>
+                </div>
+            </div>
 		</div>
 		<?php include ('structure/footer.php'); ?>
 	</body>

@@ -47,7 +47,7 @@ $(document).ready(function(){
 		****************************************/
 
 		getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
-			tab = [['Date', 'Amis', 'Total Amis']];
+			tab = [['Date', 'Ajout d\'amis', 'Total Amis']];
 			var total = 0;
 			//Double boucle pour compter le nombre d'amis par date
 			for (var i = 0; i<data.length; i++) {
@@ -122,6 +122,7 @@ $(document).ready(function(){
 		/***************************************
 		JQPLOT
 		****************************************/
+        //évolution de la note en fonction de la date
 		getRequest("webservices/notations_user.php?user="+user, function(data) {
             var tabJQ = [];
     		for (var i = 0; i<data.length; i++) {
@@ -135,7 +136,6 @@ $(document).ready(function(){
                 }
                 tabJQ.push([date, parseInt(value)]);
     		}
-            console.log(tabJQ);
 
 			if(tabJQ.length > 0){
 				var plot1 = $.jqplot('exo2', [tabJQ], {
@@ -152,8 +152,60 @@ $(document).ready(function(){
 				$('#exo2').html("NO DATA");
 			}
 		});
+
+        //Pourcentage d'amis féminins (0) et masculins (1)
+        getRequest("webservices/liste_amis_user.php?user="+user, function(data){
+            amis = [];
+            for(var i = 0; i<data.length; i++) {
+                amis.push(data[i][1]);
+            }
+            var countF = 0;
+            var countM = 0;
+            getRequest("webservices/infos_user.php?user="+amis[i], function(data){
+                for(var i = 0; i<amis.length; i++) {
+                    if(data[i][7]==0){
+                        countF += 1;
+                    } else if(data[i][7]==1){
+                        countM += 1;
+                    }
+                }
+                var tabFM = [countF*100/(countF+countM), countM*100/(countF+countM)];
+                if(tabFM.length > 0) {
+                    $.jqplot.config.enablePlugins = true;
+                    var ticks = ['Femme', 'Homme'];
+
+                    plot1 = $.jqplot('exo4', [tabFM], {
+                        title: "Pourcentage des amis pour un genre donné (jqplot)",
+                        seriesDefaults:{
+                            renderer:$.jqplot.BarRenderer,
+                            rendererOptions: { varyBarColor: true },
+                            pointLabels: { show: true }
+                        },
+                        axes: {
+                            xaxis: {
+                                renderer: $.jqplot.CategoryAxisRenderer,
+                                ticks: ticks
+                            },
+                            yaxis: {
+                                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+                                max: 100
+                            }
+                        },
+                        seriesColors:['#E63EC7', '#3EBCE6'],
+                        highlighter: { show: false }
+                    });
+    				plot1.replot();
+    			}else {
+    				$('#exo2').html("NO DATA");
+    			}
+            });
+        });
 	}
 
+
+	/***************************************
+	   Liste des utilisateurs
+	****************************************/
 	$.ajax({url: "webservices/liste_users.php", success: function(result){
 		$("#res").html(result);
 		$('#list-users').append($("<option></option>").text("").val(0));

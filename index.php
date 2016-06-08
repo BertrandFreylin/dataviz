@@ -8,25 +8,39 @@
 
 		<!-- Inclusion JS (librairie + scripts de création de graph) -->
 		<script type="text/javascript" src="js/jquery.js"></script>
+        <!--jqplot-->
 		<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
         <script type="text/javascript" src="js/renderer/jqplot.dateAxisRenderer.js"></script>
+        <script type="text/javascript" src="js/renderer/jqplot.barRenderer.js"></script>
+        <script type="text/javascript" src="js/renderer/jqplot.CategoryAxisRenderer.js"></script>
+        <!--Google charts-->
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 		<script type="text/javascript" src="js/dataviz.js"></script>
 	</head>
 	<body>
 		<?php include ('structure/header.php'); ?>
+		<div id="header">
+			<div><span class="avatar"></span></div>
+			<select id="list-users"></select>
+			<div id="user-name"><span class="name"></span></div>
+		</div>
 		<div id="content">
-            <div class="profile">
-                <h1>Statistiques pour <span class="name"></span></h1>
-                <div><span class="avatar"></span></div>
-                <div>email: <span class="email"></span></div>
-            </div>
-            <div id="exo1" class="graph"></div>
-			<div class="jqplot-graph graph">
-            	<div id="exo2" style="width: 820px; height: 500px;"></div>
+			<div id="exo1" class="graph"><p class="no-data">NO DATA</p></div>
+
+            <div class="jqplot-graph graph">
+            	<div id="exo2" style="width: 820px; height: 500px;">
+    				<p class="no-data">NO DATA</p>
+    			</div>
 			</div>
-            <div id="exo3" class="graph"></div>
+
+            <div id="exo3" class="graph"><p class="no-data">NO DATA</p></div>
+
+            <div class="jqplot-graph graph">
+                <div id="exo4" style="width: 820px; height: 500px;">
+                    <p class="no-data">NO DATA</p>
+                </div>
+            </div>
 		</div>
 		<?php include ('structure/footer.php'); ?>
 	</body>

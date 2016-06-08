@@ -17,7 +17,7 @@
 		$query = "SELECT noteur, photo, note, date
 				FROM notations";
 		if($user != 0) {
-			$query = $query." WHERE photo IN (".$user.")";
+			$query = $query." WHERE photo IN (".$user.") ORDER BY date";
 		}
 
 		$result = mysqli_query($conn, $query);

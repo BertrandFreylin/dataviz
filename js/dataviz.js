@@ -1,4 +1,4 @@
-﻿$(document).ready(function(){
+$(document).ready(function(){
 	// Pas de cache sur les requête IMPORTANT !
 	$.ajaxSetup({ cache: false });
 
@@ -17,9 +17,7 @@
 		QUESTION 1 : PIE CHART : Visite par marque
 	****************************************/
 	getRequest("webservices/liste_amis_user.php?user=4", function(data) {
-		console.log(data);
-		// var count = 0;
-		var tab = [];
+		var tab = [['Date', 'Amis']];
 		for (var i = 0; i<data.length; i++) {
 			var date = data[i][2];
 			value = 0;
@@ -30,6 +28,21 @@
 			}
 			tab.push([date, value]);
 		}
-		console.log(tab);
+
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
+
+		function drawChart() {
+			var data = google.visualization.arrayToDataTable( tab );
+
+			var options = {
+			title: 'Nombre d\'amis par date',
+			legend: { position: 'bottom' }
+			};
+
+			var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+			chart.draw(data, options);
+		}
 	});
 });

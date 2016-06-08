@@ -1,0 +1,19 @@
+body {
+    text-align: center;
+    background: #eee;
+}
+
+.graph {
+    width: 900px;
+    height: 500px;
+    margin: auto;
+    border: solid 1px #ccc;
+    box-shadow: 0px 0px 8px #ccc;
+    margin-bottom: 50px;
+    background: #fff;
+}
+
+.jqplot-graph {
+    width: 820px;
+    padding:40px !important;
+}

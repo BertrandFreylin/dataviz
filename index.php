@@ -9,6 +9,7 @@
 		<!-- Inclusion JS (librairie + scripts de création de graph) -->
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+        <script type="text/javascript" src="js/renderer/jqplot.dateAxisRenderer.js"></script>
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 		<script type="text/javascript" src="js/dataviz.js"></script>
@@ -16,7 +17,8 @@
 	<body>
 		<?php include ('structure/header.php'); ?>
 		<div id="content">
-    		<div id="curve_chart" style="width: 900px; height: 500px"></div>
+    		<div id="exo1" style="width: 900px; height: 500px"></div>
+            <div id="exo2" style="width: 900px; height: 500px"></div>
 		</div>
 		<?php include ('structure/footer.php'); ?>
 	</body>

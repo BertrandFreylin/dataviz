@@ -14,7 +14,7 @@ $(document).ready(function(){
 	}
 
 	/***************************************
-		QUESTION 1 : PIE CHART : Visite par marque
+		QUESTION 1 : évolution des amis par date
 	****************************************/
 	getRequest("webservices/liste_amis_user.php?user=4", function(data) {
 		var tab = [['Date', 'Amis', 'Total Amis']];
@@ -29,7 +29,7 @@ $(document).ready(function(){
 			}
 			total += value;
 			tab.push([date, value, total]);
-			
+
 		}
 
 		google.charts.load('current', {'packages':['corechart']});
@@ -39,13 +39,38 @@ $(document).ready(function(){
 			var data = google.visualization.arrayToDataTable( tab );
 
 			var options = {
-			title: 'Nombre d\'amis par date',
+			title: 'Nombre d\'amis par date (google charts)',
 			legend: { position: 'bottom' }
 			};
 
-			var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+			var chart = new google.visualization.LineChart(document.getElementById('exo1'));
 
 			chart.draw(data, options);
 		}
 	});
+
+    /***************************************
+		QUESTION 2 : évolution de la notation par date
+        http://www.jqplot.com/examples/date-axes.php
+	****************************************/
+	getRequest("webservices/notations_user.php?user=4", function(data) {
+		var tab = [];
+
+		for (var i = 0; i<data.length; i++) {
+			var date = data[i][3];
+			var value = data[i][2];
+			tab.push([date, parseInt(value)]);
+		}
+
+        var plot1 = $.jqplot('exo2', [tab], {
+            title:'évolution de la note (jqplot)',
+            axes:{
+                xaxis:{
+                    renderer:$.jqplot.DateAxisRenderer
+                }
+            },
+            series:[{lineWidth:4, markerOptions:{style:'square'}}]
+        });
+	});
+
 });

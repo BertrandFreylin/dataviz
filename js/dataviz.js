@@ -42,6 +42,12 @@ $(document).ready(function(){
 		GOOGLE CHARTS
 	****************************************/
 
+	// Initialiser le Google Chart
+	google.charts.load('current', {'packages':['corechart']});
+
+
+	// GRAPH 1
+
 	getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
 		tab = [['Date', 'Amis', 'Total Amis']];
 		var total = 0;
@@ -61,28 +67,7 @@ $(document).ready(function(){
 		}
 	});
 
-	getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
-		tab2 = [['Date', 'Amis', 'Total Amis']];
-		var total = 0;
-        //Double boucle pour compter le nombre d'amis par date
-		for (var i = 0; i<data.length; i++) {
-			var date = data[i][2];
-			value = 0;
-			for(var j = i; j<data.length; j++) {
-				if(date == data[j][2]){         //Si on est déjà tombé sur la date, on ne rajoute pas de doublon dans le tableau
-					value+=1;
-					i = j;
-				}
-			}
-			total += value;
-			tab2.push([date, value, total]);
 
-		}
-	});
-
-	google.charts.load('current', {'packages':['corechart']});
-	google.charts.setOnLoadCallback(drawChart1);
-	google.charts.setOnLoadCallback(drawChart2);
 
     //Fonction pour dessiner le graphique des amis par date
 	function drawChart1() {
@@ -97,20 +82,44 @@ $(document).ready(function(){
 
 		chart.draw(data, options);
 	}
+	google.charts.setOnLoadCallback(drawChart1);
 
-    function drawChart2() {
-		var data = google.visualization.arrayToDataTable( tab2 );
 
-		var options = {
-		title: 'Nombre d\'amis par date (google charts)',
-		legend: { position: 'bottom' }
-		};
+	// GRAPH 2
 
-		var chart = new google.visualization.LineChart(document.getElementById('exo3'));
+	getRequest("webservices/messages_user.php?user="+user, function(data) {
+		getRequest("webservices/liste_amis_user.php?user="+user, function(data_user) {
+			var amis = 1;
+			var pas_amis = 1;
+			for (var i = 0; i<data.length; i++) {
+				value = data[i];
+				if($.inArray(value, data_user)){
+					amis += 1;
+				}else{
+					pas_amis += 1;
+				}
+			};
 
-		chart.draw(data, options);
-	}
+			tab2 = [['Destinataire', 'Message'],
+					['Amis',amis],
+					['Pas Amis',pas_amis]];
+
+			});	
+	});
 	
+	function drawChart2() {
+	
+	var data = google.visualization.arrayToDataTable(tab2);
+
+	var options = {
+	  title: 'Pourcentage message'
+	};
+
+	var chart = new google.visualization.PieChart(document.getElementById('exo3'));
+
+	chart.draw(data, options);
+	}
+	google.charts.setOnLoadCallback(drawChart2);
 
     /***************************************
 		JQPLOT

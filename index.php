@@ -17,8 +17,14 @@
 	<body>
 		<?php include ('structure/header.php'); ?>
 		<div id="content">
+            <div class="profile">
+                <h1>Statistiques pour <span class="name"></span></h1>
+                <div><span class="avatar"></span></div>
+                <div>email: <span class="email"></span></div>
+            </div>
     		<div id="exo1" style="width: 900px; height: 500px"></div>
             <div id="exo2" style="width: 900px; height: 500px"></div>
+            <div id="exo3" style="width: 900px; height: 500px"></div>
 		</div>
 		<?php include ('structure/footer.php'); ?>
 	</body>

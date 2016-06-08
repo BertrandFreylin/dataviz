@@ -13,18 +13,43 @@ $(document).ready(function(){
 		});
 	}
 
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    };
+
+    var user = getUrlParameter("user");
+
 	/***************************************
-		QUESTION 1 : évolution des amis par date
+		INFOS PROFIL
 	****************************************/
-	getRequest("webservices/liste_amis_user.php?user=4", function(data) {
+    getRequest("webservices/infos_user.php?user="+user, function(data) {
+        $(".name").text(data[0][1]);
+        $(".avatar").html("<img src='img/avatar"+data[0][4]+".jpg'>");
+        $(".email").text(data[0][3]);
+    });
+	/***************************************
+		GOOGLE CHARTS
+	****************************************/
+	getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
 		var tab = [['Date', 'Amis', 'Total Amis']];
-		console.log(data);
-		var total =0;
+		var total = 0;
+        //Double boucle pour compter le nombre d'amis par date
 		for (var i = 0; i<data.length; i++) {
 			var date = data[i][2];
 			value = 0;
 			for(var j = i; j<data.length; j++) {
-				if(date == data[j][2]){
+				if(date == data[j][2]){         //Si on est déjà tombé sur la date, on ne rajoute pas de doublon dans le tableau
 					value+=1;
 					i = j;
 				}
@@ -35,9 +60,11 @@ $(document).ready(function(){
 		}
 
 		google.charts.load('current', {'packages':['corechart']});
-		google.charts.setOnLoadCallback(drawChart);
+		google.charts.setOnLoadCallback(drawChart1);
+		google.charts.setOnLoadCallback(drawChart2);
 
-		function drawChart() {
+        //Fonction pour dessiner le graphique des amis par date
+		function drawChart1() {
 			var data = google.visualization.arrayToDataTable( tab );
 
 			var options = {
@@ -49,13 +76,25 @@ $(document).ready(function(){
 
 			chart.draw(data, options);
 		}
+
+        function drawChart2() {
+			var data = google.visualization.arrayToDataTable( tab );
+
+			var options = {
+			title: 'Nombre d\'amis par date (google charts)',
+			legend: { position: 'bottom' }
+			};
+
+			var chart = new google.visualization.LineChart(document.getElementById('exo3'));
+
+			chart.draw(data, options);
+		}
 	});
 
     /***************************************
-		QUESTION 2 : évolution de la notation par date
-        http://www.jqplot.com/examples/date-axes.php
+		JQPLOT
 	****************************************/
-	getRequest("webservices/notations_user.php?user=4", function(data) {
+	getRequest("webservices/notations_user.php?user="+user, function(data) {
 		var tab = [];
 
 		for (var i = 0; i<data.length; i++) {
@@ -74,5 +113,4 @@ $(document).ready(function(){
             series:[{lineWidth:4, markerOptions:{style:'square'}}]
         });
 	});
-
 });

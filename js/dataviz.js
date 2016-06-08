@@ -123,17 +123,22 @@ $(document).ready(function(){
 		JQPLOT
 		****************************************/
 		getRequest("webservices/notations_user.php?user="+user, function(data) {
-			var tabjq = [];
-			tabjq.length = 0;
+            var tabJQ = [];
+    		for (var i = 0; i<data.length; i++) {
+    			var date = data[i][3];
+    			var value = data[i][2];
+                for(var j = i+1; j<data.length-1; j++) {                //Double boucle pour les cas où plusieurs notes sont données le même jour, dans ce cas, on fait la moyenne des notes données
+                    if(date == data[j][3]){
+                        value = (parseInt(value)+parseInt(data[j][2]))/2;
+                        i = j;
+                    }
+                }
+                tabJQ.push([date, parseInt(value)]);
+    		}
+            console.log(tabJQ);
 
-			for (var i = 0; i<data.length; i++) {
-				var date = data[i][3];
-				var value = data[i][2];
-				tabjq.push([date, parseInt(value)]);
-			}
-
-			if(tabjq.length > 0){
-				var plot1 = $.jqplot('exo2', [tabjq], {
+			if(tabJQ.length > 0){
+				var plot1 = $.jqplot('exo2', [tabJQ], {
 					title:'évolution de la note (jqplot)',
 					axes:{
 						xaxis:{

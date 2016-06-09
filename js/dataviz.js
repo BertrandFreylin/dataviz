@@ -43,6 +43,11 @@ $(document).ready(function(){
 			$(".email").text(data[0][3]);
 		});
 
+		if(!load){
+			google.charts.load('current', {'packages':['corechart']});
+			load = true;
+		}
+
 		/***************************************
 		GOOGLE CHARTS
 		****************************************/
@@ -70,6 +75,12 @@ $(document).ready(function(){
 				tab.push([date, value, total]);
 
 			}
+
+			if(selection == "all" || selection == "exo1")
+			google.charts.setOnLoadCallback(drawChart1);
+			else
+			$('#exo1').hide();
+
 		});
 
 
@@ -96,22 +107,11 @@ $(document).ready(function(){
 				tab2.push([date, value, total]);
 
 			}
+
 		});
 
-		if(!load){
-			google.charts.load('current', {'packages':['corechart']});
-			load = true;
-		}
 
-		if(selection == "all" || selection == "exo1")
-		google.charts.setOnLoadCallback(drawChart1);
-		else
-		$('#exo1').hide();
 
-		if(selection == "all" || selection == "exo3")
-		google.charts.setOnLoadCallback(drawChart2);
-		else
-		$('#exo3').hide();
 
 		//Fonction pour dessiner le graphique des amis par date
 		function drawChart1() {
@@ -151,6 +151,11 @@ $(document).ready(function(){
 				tab2 = [['Destinataire', 'Message'],
 				['Amis',amis],
 				['Pas Amis',pas_amis]];
+
+				if(selection == "all" || selection == "exo3")
+				google.charts.setOnLoadCallback(drawChart2);
+				else
+				$('#exo3').hide();
 
 			});
 

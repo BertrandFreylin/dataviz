@@ -31,7 +31,7 @@ $(document).ready(function(){
 
 
 
-	function loadStats(user){
+	function loadStats(user, selection){
 		/***************************************
 		INFOS PROFIL
 		****************************************/
@@ -42,11 +42,18 @@ $(document).ready(function(){
 			}});
 			$(".email").text(data[0][3]);
 		});
+
 		/***************************************
 		GOOGLE CHARTS
 		****************************************/
 
 		getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
+
+			if(data.length > 0)
+			$("a[selection='exo1']").parent().removeClass('disabled');
+			else
+			$("a[selection='exo1']").parent().addClass('disabled');
+
 			tab = [['Date', 'Ajout d\'amis', 'Total Amis']];
 			var total = 0;
 			//Double boucle pour compter le nombre d'amis par date
@@ -65,7 +72,14 @@ $(document).ready(function(){
 			}
 		});
 
+
 		getRequest("webservices/liste_amis_user.php?user="+user, function(data) {
+
+			if(data.length > 0)
+			$("a[selection='exo3']").parent().removeClass('disabled');
+			else
+			$("a[selection='exo3']").parent().addClass('disabled');
+
 			tab2 = [['Date', 'Amis', 'Total Amis']];
 			var total = 0;
 			//Double boucle pour compter le nombre d'amis par date
@@ -88,21 +102,32 @@ $(document).ready(function(){
 			google.charts.load('current', {'packages':['corechart']});
 			load = true;
 		}
+
+		if(selection == "all" || selection == "exo1")
 		google.charts.setOnLoadCallback(drawChart1);
+		else
+		$('#exo1').hide();
+
+		if(selection == "all" || selection == "exo3")
 		google.charts.setOnLoadCallback(drawChart2);
+		else
+		$('#exo3').hide();
 
 		//Fonction pour dessiner le graphique des amis par date
 		function drawChart1() {
 			var data = google.visualization.arrayToDataTable( tab );
 
-			var options = {
-				title: 'Nombre d\'amis par date (google charts)',
-				legend: { position: 'bottom' }
-			};
+			if(data != null){
+				$('#exo1').show();
+				var options = {
+					title: 'Nombre d\'amis par date (google charts)',
+					legend: { position: 'bottom' }
+				};
 
-			var chart = new google.visualization.LineChart(document.getElementById('exo1'));
+				var chart = new google.visualization.LineChart(document.getElementById('exo1'));
 
-			chart.draw(data, options);
+				chart.draw(data, options);
+			}else { $('#exo1').hide(); }
 		}
 
 		// GRAPH 2
@@ -124,45 +149,56 @@ $(document).ready(function(){
 				};
 
 				tab2 = [['Destinataire', 'Message'],
-						['Amis',amis],
-						['Pas Amis',pas_amis]];
+				['Amis',amis],
+				['Pas Amis',pas_amis]];
 
-				});	
+			});
 
 		});
-		
+
 		function drawChart2() {
-		var data_chart2 = google.visualization.arrayToDataTable(tab2);
+			var data_chart2 = google.visualization.arrayToDataTable(tab2);
 
-		var options = {
-		  title: 'Pourcentage message'
-		};
+			if(data_chart2 != null){
+				$('#exo3').show();
+				var options = {
+					title: 'Pourcentage message'
+				};
 
-		var chart = new google.visualization.PieChart(document.getElementById('exo3'));
+				var chart = new google.visualization.PieChart(document.getElementById('exo3'));
 
-		chart.draw(data_chart2, options);
+				chart.draw(data_chart2, options);
+			}else { $('#exo3').hide(); }
 		}
 
 
 		/***************************************
 		JQPLOT
 		****************************************/
-        //évolution de la note en fonction de la date
-		getRequest("webservices/notations_user.php?user="+user, function(data) {
-            var tabJQ = [];
-    		for (var i = 0; i<data.length; i++) {
-    			var date = data[i][3];
-    			var value = data[i][2];
-                for(var j = i+1; j<data.length-1; j++) {                //Double boucle pour les cas où plusieurs notes sont données le même jour, dans ce cas, on fait la moyenne des notes données
-                    if(date == data[j][3]){
-                        value = (parseInt(value)+parseInt(data[j][2]))/2;
-                        i = j;
-                    }
-                }
-                tabJQ.push([date, parseInt(value)]);
-    		}
+		//évolution de la note en fonction de la date
 
-			if(tabJQ.length > 0){
+
+		getRequest("webservices/notations_user.php?user="+user, function(data) {
+
+			if(data.length > 0)
+			$("a[selection='exo2']").parent().removeClass('disabled');
+			else
+			$("a[selection='exo2']").parent().addClass('disabled');
+
+			if((selection == "all" || selection == "exo2") && data.length > 0){
+				$('#jqplot-graph-exo2').show();
+				var tabJQ = [];
+				for (var i = 0; i<data.length; i++) {
+					var date = data[i][3];
+					var value = data[i][2];
+					for(var j = i+1; j<data.length-1; j++) {                //Double boucle pour les cas où plusieurs notes sont données le même jour, dans ce cas, on fait la moyenne des notes données
+						if(date == data[j][3]){
+							value = (parseInt(value)+parseInt(data[j][2]))/2;
+							i = j;
+						}
+					}
+					tabJQ.push([date, parseInt(value)]);
+				}
 				var plot1 = $.jqplot('exo2', [tabJQ], {
 					title:'évolution de la note (jqplot)',
 					axes:{
@@ -173,63 +209,71 @@ $(document).ready(function(){
 					series:[{lineWidth:4, markerOptions:{style:'square'}}]
 				});
 				plot1.replot();
+
 			}else {
-				$('#exo2').html("NO DATA");
+				$('#jqplot-graph-exo2').hide();
 			}
 		});
 
-        //Pourcentage d'amis féminins (0) et masculins (1)
-        getRequest("webservices/liste_amis_user.php?user="+user, function(data){
-            amis = [];
-            for(var i = 0; i<data.length; i++) {
-                amis.push(data[i][1]);
-            }
-            var countF = 0;
-            var countM = 0;
-            getRequest("webservices/infos_user.php?user="+amis[i], function(data){
-                for(var i = 0; i<amis.length; i++) {
-                    if(data[i][7]==0){
-                        countF += 1;
-                    } else if(data[i][7]==1){
-                        countM += 1;
-                    }
-                }
-                var tabFM = [countF*100/(countF+countM), countM*100/(countF+countM)];
-                if(tabFM.length > 0) {
-                    $.jqplot.config.enablePlugins = true;
-                    var ticks = ['Femme', 'Homme'];
+		//Pourcentage d'amis féminins (0) et masculins (1)
+		getRequest("webservices/liste_amis_user.php?user="+user, function(data){
 
-                    plot1 = $.jqplot('exo4', [tabFM], {
-                        title: "Pourcentage des amis pour un genre donné (jqplot)",
-                        seriesDefaults:{
-                            renderer:$.jqplot.BarRenderer,
-                            rendererOptions: { varyBarColor: true },
-                            pointLabels: { show: true }
-                        },
-                        axes: {
-                            xaxis: {
-                                renderer: $.jqplot.CategoryAxisRenderer,
-                                ticks: ticks
-                            },
-                            yaxis: {
-                                ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-                                max: 100
-                            }
-                        },
-                        seriesColors:['#E63EC7', '#3EBCE6'],
-                        highlighter: { show: false }
-                    });
-    				plot1.replot();
-    			}else {
-    				$('#exo2').html("NO DATA");
-    			}
-            });
-        });
+			if(data.length > 0)
+			$("a[selection='exo4']").parent().removeClass('disabled');
+			else
+			$("a[selection='exo4']").parent().addClass('disabled');
+
+			if(selection == "all" || selection == "exo4"){
+				$('#jqplot-graph-exo4').show();
+				amis = [];
+				for(var i = 0; i<data.length; i++) {
+					amis.push(data[i][1]);
+				}
+				var countF = 0;
+				var countM = 0;
+				getRequest("webservices/infos_user.php?user="+amis[i], function(data){
+					for(var i = 0; i<amis.length; i++) {
+						if(data[i][7]==0){
+							countF += 1;
+						} else if(data[i][7]==1){
+							countM += 1;
+						}
+					}
+					var tabFM = [countF*100/(countF+countM), countM*100/(countF+countM)];
+					$.jqplot.config.enablePlugins = true;
+					var ticks = ['Femme', 'Homme'];
+
+					plot1 = $.jqplot('exo4', [tabFM], {
+						title: "Pourcentage des amis pour un genre donné (jqplot)",
+						seriesDefaults:{
+							renderer:$.jqplot.BarRenderer,
+							rendererOptions: { varyBarColor: true },
+							pointLabels: { show: true }
+						},
+						axes: {
+							xaxis: {
+								renderer: $.jqplot.CategoryAxisRenderer,
+								ticks: ticks
+							},
+							yaxis: {
+								ticks: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+								max: 100
+							}
+						},
+						seriesColors:['#E63EC7', '#3EBCE6'],
+						highlighter: { show: false }
+					});
+					plot1.replot();
+
+				});
+			}else {
+				$('#jqplot-graph-exo4').hide();
+			}
+		});
 	}
 
-
 	/***************************************
-	   Liste des utilisateurs
+	Liste des utilisateurs
 	****************************************/
 	$.ajax({url: "webservices/liste_users.php", success: function(result){
 		$("#res").html(result);
@@ -242,8 +286,14 @@ $(document).ready(function(){
 	}});
 
 	$('#list-users').on('change', function(){
-		loadStats($(this).val());
+		$selection = $('.tabs .tab a.active').attr('selection');
+		loadStats($(this).val(), $selection);
 	});
+
+	$('.nav-selection .tabs .tab a').on('click', function(){
+		loadStats($('#list-users').val(), $(this).attr('selection'));
+	})
+
 
 
 });

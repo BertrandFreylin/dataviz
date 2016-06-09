@@ -4,7 +4,7 @@ body {
 }
 
 .graph {
-    width: 900px;
+    width: 80vw;
     height: 500px;
     margin: auto;
     border: solid 1px #ccc;
@@ -14,8 +14,9 @@ body {
 }
 
 .jqplot-graph {
-    width: 820px;
-    padding:40px !important;
+    width: 80vw;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 #header {
@@ -31,7 +32,8 @@ body {
 }
 
 #content {
-    margin-top: 100px;
+    margin-top: 90px;
+    padding-top: 90px;
 }
 
 #list-users {
@@ -39,6 +41,10 @@ body {
     right: 0;
     margin-top: 35px;
     margin-right: 35px;
+    border: solid 1px #ccc;
+    height: 30px;
+    display: block;
+    width: 200px;
 }
 
 .avatar {
@@ -66,4 +72,13 @@ body {
     margin-top: 220px;
     color: #ccc;
     font-size: 30px;
+}
+
+.nav-selection {
+    position: fixed;
+    z-index: 3000;
+    width: 100vw;
+    height:48px;
+    margin-top:-90px;
+    border-bottom: solid 49px #ccc;
 }

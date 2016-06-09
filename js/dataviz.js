@@ -176,7 +176,67 @@ $(document).ready(function(){
 			}else { $('#exo3').hide(); }
 		}
 
+		// GRAPH 5
 
+		data_request5 = [];
+		data_request_info5 = [];
+		getRequest("webservices/liste_amis_user.php?user="+user, function(data_request5) {
+
+			if(data_request5.length > 0)
+			$("a[selection='exo5']").parent().removeClass('disabled');
+			else
+			$("a[selection='exo5']").parent().addClass('disabled');
+
+			liste_amis_user = data_request5;
+			first = 0;
+			second = 0;
+			third = 0;
+			for (var i = 0; i<liste_amis_user.length; i++) {
+				data_request_info5 = [];
+				new_user = liste_amis_user[i][1];
+				getRequest("webservices/infos_user.php?user="+new_user, function(data_request_info5) {
+					for (var i = 0; i<data_request_info5.length; i++) {
+						if((data_request_info5[i][6]>=18)&&(data_request_info5[i][6]<=21)){
+							first +=1;
+						}
+						else if((data_request_info5[i][6]>=22)&&(data_request_info5[i][6]<=25)){
+							second +=1;
+						}
+						else if((data_request_info5[i][6]>=26)&&(data_request_info5[i][6]<=29)){
+							third +=1;
+						}
+					};
+				});
+			};
+
+			if(selection == "all" || selection == "exo5")
+			google.charts.setOnLoadCallback(drawChart5);
+			else
+			$('#exo5').hide();
+
+			
+		});
+
+		function drawChart5() {
+			tab5 = [
+			         ['Age', 'Nombre', { role: 'style' }],
+			         ['18-21', first, '#b87333'],
+			         ['22-25', second, 'silver'],
+			         ['26-29', third, 'gold'],
+			      ];
+			var data_chart5 = google.visualization.arrayToDataTable(tab5);
+
+			if(data_chart5 != null){
+				$('#exo5').show();
+				var options = {
+					title: 'Repartition amis par age'
+				};
+
+				var chart = new google.visualization.BarChart(document.getElementById('exo5'));
+
+				chart.draw(data_chart5, options);
+			}else { $('#exo5').hide(); }
+		}
 		/***************************************
 		JQPLOT
 		****************************************/

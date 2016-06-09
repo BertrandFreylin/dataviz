@@ -34,6 +34,7 @@
 					<li class="tab col s3 disabled"><a selection="exo2">Exo 2</a></li>
 					<li class="tab col s3 disabled"><a selection="exo3">Exo 3</a></li>
 					<li class="tab col s3 disabled"><a selection="exo4">Exo 4</a></li>
+					<li class="tab col s3 disabled"><a selection="exo5">Exo 5</a></li>
 				</ul>
 			</div>
 		</div>
@@ -53,6 +54,7 @@
 				<p class="no-data">NO DATA</p>
 			</div>
 		</div>
+		<div id="exo5" class="graph"  style="display:none;"><p class="no-data">NO DATA</p></div>
 	</div>
 	<?php include ('structure/footer.php'); ?>
 </body>

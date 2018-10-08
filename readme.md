@@ -1,6 +1,6 @@
 Comment utiliser l'appli:
 - La page index affiche une liste pour sélectionner un utilisateur, une fois celui-ci sélectionné, on peut voir les graphiques de cet utilisateur
-- La page est responsive (les graphiques moins)
+- La page est responsive
 - Il y a des graphiques des librairies: jqplot, google charts
 
 Nous avons répondu aux questions:
